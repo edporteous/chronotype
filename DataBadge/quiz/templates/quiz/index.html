@@ -1,0 +1,21 @@
+<h1>Data Badge Quiz</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'quiz:submit' %}" method="post">
+{% csrf_token %}
+
+<p>First name: <input type="text" name="firstname"></p>
+<p>Last name: <input type="text" name="lastname"></p>
+<p>Organisation: <input type="text" name="organisation"></p>
+<p>Sector: <select name="sector">{% for id, name in sectors %}
+	<option value="{{ id }}">{{ name }}</option>{% endfor %}</select></p>
+{% for question in questions %}
+<h2>{{ forloop.counter }}. {{ question.question }}</h2>
+	{% for choice in question.choices %}<input type="radio" name="question{{ forloop.parentloop.counter }}" id="answer{{ forloop.parentloop.counter }}_{{ forloop.counter }}" value="{{ forloop.counter }}" />
+		<label for="answer{{ forloop.parentloop.counter }}_{{ forloop.counter }}">{{ choice }}<br></label>
+	{% endfor %}
+{% endfor %}
+
+<input type="submit" value="Answer" />
+</form>
