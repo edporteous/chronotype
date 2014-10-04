@@ -54,19 +54,19 @@
                 <div class="form-group">                       
                     <input type="text" class="form-control" name="lastname" placeholder="Last name">
                 </div>
-                                
-                <p>First name: <input type="text" name="firstname"></p>
-                <p>Last name: <input type="text" name="lastname"></p>
-                <p>Organisation: <input type="text" name="organisation"></p>
-                <p>Sector: <select name="sector">{% for id, name in sectors %}
-                    <option value="{{ id }}">{{ name }}</option>{% endfor %}</select></p>
-                {% for question in questions %}
-                <h2>{{ forloop.counter }}. {{ question.question }}</h2>
-                    {% for choice in question.choices %}<p><input type="radio" name="question{{ forloop.parentloop.counter }}" id="answer{{ forloop.parentloop.counter }}_{{ forloop.counter }}" value="{{ forloop.counter }}" />
-                        <label for="answer{{ forloop.parentloop.counter }}_{{ forloop.counter }}">{{ choice }}</label></p>
+                <div class="form-group">                       
+                    <input type="text" class="form-control" name="organisation" placeholder="Organisation">
+                </div>
+                <div class="form-group"> 
+                    Sector: <select class="form-control" name="sector" placeholder="Sector">{% for id, name in sectors %}
+                        <option value="{{ id }}">{{ name }}</option>{% endfor %}</select></p>
+                    {% for question in questions %}
+                    <h2>{{ forloop.counter }}. {{ question.question }}</h2>
+                        {% for choice in question.choices %}<p><input type="radio" name="question{{ forloop.parentloop.counter }}" id="answer{{ forloop.parentloop.counter }}_{{ forloop.counter }}" value="{{ forloop.counter }}" />
+                            <label for="answer{{ forloop.parentloop.counter }}_{{ forloop.counter }}">{{ choice }}</label>
+                        {% endfor %}
                     {% endfor %}
-                {% endfor %}
-                
+                </div>
                 <input type="submit" value="Answer" />
                 </form>
             </div>
