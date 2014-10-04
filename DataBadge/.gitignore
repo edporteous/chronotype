@@ -6,3 +6,4 @@
 /.gaedata
 /.pydevproject
 /.project
+*.pyc
