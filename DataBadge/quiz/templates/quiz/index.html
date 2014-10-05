@@ -62,8 +62,8 @@
                         <option value="{{ id }}">{{ name }}</option>{% endfor %}</select></p>
                     {% for question in questions %}
                     <h2>{{ forloop.counter }}. {{ question.question }}</h2>
-                        {% for choice in question.choices %}<p><input type="radio" name="question{{ forloop.parentloop.counter }}" id="answer{{ forloop.parentloop.counter }}_{{ forloop.counter }}" value="{{ forloop.counter }}" />
-                            <label for="answer{{ forloop.parentloop.counter }}_{{ forloop.counter }}">{{ choice }}</label>
+                        {% for choice in question.choices %}<p><input type="radio" name="question{{ forloop.parentloop.counter }}" id="answer{{ forloop.parentloop.counter }}_{{ forloop.counter }}" value=" {{ forloop.counter }}" />
+                            <label for="answer{{ forloop.parentloop.counter }}_{{ forloop.counter }}">{{ choice.text }}</label>
                         {% endfor %}
                     {% endfor %}
                 </div>
