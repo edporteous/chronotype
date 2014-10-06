@@ -58,17 +58,23 @@ QUESTIONS = [
               Choice('Definitely an "evening" type', 0)]),
             ]
 
-image = {1: 'extremelarksmall.jpg',
-         2: 'larksmall.jpg',
+image = {5: 'extremelarksmall.jpg',
+         4: 'larksmall.jpg',
          3: 'owlarksmall.jpg',
-         4: 'owlsmall.jpg',
-         5: 'extremeowlsmall.jpg'}
+         2: 'owlsmall.jpg',
+         1: 'extremeowlsmall.jpg'}
 
-chronotype = {1: 'Extreme Lark',
-              2: 'Lark',
+image_highres = {5: 'extremelark.jpg',
+               4: 'lark.jpg',
+               3: 'owlark.jpg',
+               2: 'owl.jpg',
+               1: 'extremeowl.jpg'}
+
+chronotype = {5: 'Extreme Lark',
+              4: 'Lark',
               3: 'Owlark',
-              4: 'Owl',
-              5: 'Extreme Owl',}
+              2: 'Owl',
+              1: 'Extreme Owl',}
 
 def print_badge(delegate):
     name = delegate.first_name + ' ' + delegate.last_name
@@ -134,7 +140,7 @@ def calculate_quiz_result(responses):
         return 3
     elif score >= 18 and 21 >= score:
         return 4
-    elif score >= 25 and 26 >= score:
+    elif score >= 22 and 25 >= score:
         return 5
     else:
         raise AssertionError('illegal score ({0})'.format(score))

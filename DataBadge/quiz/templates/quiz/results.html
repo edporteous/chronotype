@@ -43,7 +43,7 @@
             <div class="starter-template">
                 <h1>Data Badge Quiz</h1>
                 <p>Thanks for completing the quiz. Your chronotype is {{ chronotype }}.</p>
-                <img src="{% static 'quiz/{{ bird_image }}' %}" alt="{{ chronotype }} bird image">
+                <img class="birdimage" src="{% static 'quiz/images' %}/{{ bird_image }}" alt="{{ chronotype }} bird image">
                 <p>Your badge will be printed shortly</p>
             </div>
         </div><!-- /.container -->

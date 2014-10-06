@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from quiz.models import *
-from quiz.controller import QUESTIONS, calculate_quiz_result, print_badge, chronotype, image
+from quiz.controller import QUESTIONS, calculate_quiz_result, print_badge, chronotype, image, image_highres
 
 
 def index(request):
@@ -32,8 +32,7 @@ def submit(request):
     print_badge(delegate)
     return render(request, 'quiz/results.html',
                   {'chronotype': chronotype[delegate.quiz_result],
-                   'bird_image': image[delegate.quiz_result],})
-    #return HttpResponseRedirect(reverse('quiz:results'))
+                   'bird_image': image_highres[delegate.quiz_result],})
 
 def results(request):
     context = {'chronotype': None,
