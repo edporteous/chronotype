@@ -1,5 +1,5 @@
 """
-Django settings for DataBadge project.
+Django settings for Chronotype project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.6/topics/settings/
@@ -155,9 +155,9 @@ INSTALLED_APPS = (
 #     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 # )
 
-ROOT_URLCONF = 'DataBadge.urls'
+ROOT_URLCONF = 'Chronotype.urls'
 
-WSGI_APPLICATION = 'DataBadge.wsgi.application'
+WSGI_APPLICATION = 'Chronotype.wsgi.application'
 
 
 # Database
