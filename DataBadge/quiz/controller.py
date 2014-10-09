@@ -113,7 +113,7 @@ font-weight: normal;
                 '</head><body>' +
                 '<h1>' + name.upper() + '</h1>' +
                 '<h2>' + organisation + '</h2>' +
-                '<img src="http://data-badge.appspot.com/static/quiz/images/{0}"></img>'.format(image[delegate.quiz_result]) +
+                '<img src="http://chronotype.co.uk/static/quiz/images/{0}"></img>'.format(image[delegate.quiz_result]) +
                 '<h3>made by theotherwayworks.co.uk</h3>' +
                 '</body></html>')]
     result = urllib2.urlopen('http://remote.bergcloud.com/playground/direct_print/P3WPAOFL3FDN', urllib.urlencode(post_data))
