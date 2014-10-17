@@ -1,5 +1,5 @@
 from django.contrib import admin
-from quiz.models import Delegate, Printer, Badge
+from quiz.models import Delegate, Printer
 from quiz import controller
 
 chronotype = {1: 'Extreme lark',
@@ -21,11 +21,10 @@ class DelegateAdmin(admin.ModelAdmin):
                                                       'sector',]}),
         ('Quiz',                          {'fields': ['quiz_answers',
                                                       'quiz_result',]}),
-        ('Details',                       {'fields': ['created',],
-                                           'classes': ['collapse']}),
+        ('Details',                       {'fields': ['created','printed',]}),
         ]
     actions = [admin_print_badges]
 
 admin.site.register(Delegate, DelegateAdmin)
 admin.site.register(Printer)
-admin.site.register(Badge)
+

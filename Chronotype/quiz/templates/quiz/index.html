@@ -46,28 +46,28 @@
                 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
                 
                 <form action="{% url 'quiz:submit' %}" method="post">
-                {% csrf_token %}
-                
-                <div class="form-group">                       
-                    <input type="text" class="form-control" name="firstname" placeholder="First name">
-                </div>
-                <div class="form-group">                       
-                    <input type="text" class="form-control" name="lastname" placeholder="Last name">
-                </div>
-                <div class="form-group">                       
-                    <input type="text" class="form-control" name="organisation" placeholder="Organisation">
-                </div>
-                <div class="form-group"> 
-                    Sector: <select class="form-control" name="sector" placeholder="Sector">{% for id, name in sectors %}
-                        <option value="{{ id }}">{{ name }}</option>{% endfor %}</select></p>
-                    {% for question in questions %}
-                    <h2>{{ forloop.counter }}. {{ question.question }}</h2>
-                        {% for choice in question.choices %}<p><input type="radio" name="question{{ forloop.parentloop.counter }}" id="answer{{ forloop.parentloop.counter }}_{{ forloop.counter }}" value=" {{ forloop.counter }}" />
-                            <label for="answer{{ forloop.parentloop.counter }}_{{ forloop.counter }}">{{ choice.text }}</label>
+                    {% csrf_token %}
+                    
+                    <div class="form-group">                       
+                        <input type="text" class="form-control" name="firstname" placeholder="First name">
+                    </div>
+                    <div class="form-group">                       
+                        <input type="text" class="form-control" name="lastname" placeholder="Last name">
+                    </div>
+                    <div class="form-group">                       
+                        <input type="text" class="form-control" name="organisation" placeholder="Organisation">
+                    </div>
+                    <div class="form-group"> 
+                        Sector: <select class="form-control" name="sector" placeholder="Sector">{% for id, name in sectors %}
+                            <option value="{{ id }}">{{ name }}</option>{% endfor %}</select></p>
+                        {% for question in questions %}
+                        <h2>{{ forloop.counter }}. {{ question.question }}</h2>
+                            {% for choice in question.choices %}<p><input type="radio" name="question{{ forloop.parentloop.counter }}" id="answer{{ forloop.parentloop.counter }}_{{ forloop.counter }}" value=" {{ forloop.counter }}" />
+                                <label for="answer{{ forloop.parentloop.counter }}_{{ forloop.counter }}">{{ choice.text }}</label>
+                            {% endfor %}
                         {% endfor %}
-                    {% endfor %}
-                </div>
-                <input class="btn btn-lg btn-warning" type="submit" value="Answer" />
+                    </div>
+                    <input class="btn btn-lg btn-warning" type="submit" value="Answer" />
                 </form>
             </div>
         </div><!-- /.container -->

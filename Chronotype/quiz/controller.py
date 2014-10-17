@@ -3,10 +3,16 @@ Created on 5 Oct 2014
 
 @author: Ed
 '''
-
-#from quiz.models import Delegate, Printer, Badge
+import logging
+from datetime import datetime, timedelta
+from django.conf import settings
+from quiz.models import Delegate, Printer
 import urllib2, urllib
 
+logger = logging.getLogger(__name__)
+
+#URL = 'http://remote.bergcloud.com/playground/direct_print/P3WPAOFL3FDN'
+URL = 'http://127.0.0.1:8010/'
 
 class Choice(object):
     def __init__(self, text, score):
@@ -56,6 +62,12 @@ QUESTIONS = [
               Choice('Rather more a "morning" than "evening" type', 4),
               Choice('Rather more an "evening" than a "morning" type', 2), 
               Choice('Definitely an "evening" type', 0)]),
+    Question('Which is your favourite of these cakes:',
+             [Choice('Chocolate Sponge Cake', 0),
+              Choice('Carrot Cake', 0),
+              Choice('Victoria Sandwich', 0),
+              Choice('Lemon Drizzle Cake', 0),
+              Choice('Coffee & Walnut Cake', 0),])
             ]
 
 image = {5: 'extremelarksmall.jpg',
@@ -116,13 +128,13 @@ font-weight: normal;
                 '<img src="http://chronotype.co.uk/static/quiz/images/{0}"></img>'.format(image[delegate.quiz_result]) +
                 '<h3>made by theotherwayworks.co.uk</h3>' +
                 '</body></html>')]
-    result = urllib2.urlopen('http://remote.bergcloud.com/playground/direct_print/P3WPAOFL3FDN', urllib.urlencode(post_data))
+    result = urllib2.urlopen(URL, urllib.urlencode(post_data))
     content = result.read()
-    if content == 'OK':
-        print('Successfully printed badge: ' + name)
-    else:
-        print('Unexpected response from remote.bergcloud.com:')
-        print content
+#     if content == 'OK':
+#         print('Successfully printed badge: ' + name)
+#     else:
+#         print('Unexpected response from remote.bergcloud.com:')
+#         print content
 
 def calculate_quiz_result(responses):
     """Calculate the chronotype based on the responses. 
@@ -144,6 +156,24 @@ def calculate_quiz_result(responses):
         return 5
     else:
         raise AssertionError('illegal score ({0})'.format(score))
+
+def process_print_queue():
+    delegate = Delegate.objects.filter(printed=False).order_by('created').first()
+    if delegate is not None:
+        time_since_last_request = datetime.now() - delegate.created
+        if time_since_last_request < timedelta(seconds=settings.MIN_PRINT_INTERVAL):
+            logger.info('Ignored print badge request because previous request was {0} seconds ago. Setting MIN_PRINT_INTERVAL={1} seconds.'.format(
+                                                                                                time_since_last_request, settings.MIN_PRINT_INTERVAL))
+            message = 'Nothing to do.'
+        else:
+            delegate.printed = True
+            delegate.save()
+            print_badge(delegate)
+            message = 'Printing badge for {0}.'.format(str(delegate))
+    else:
+        message = 'No more badges to print.'
+    logger.info(message)
+    return message
 
 # calculateResult: function () {
 # var e,

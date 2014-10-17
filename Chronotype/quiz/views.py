@@ -1,10 +1,14 @@
-from django.http import HttpResponse, HttpResponseRedirect
+import logging
+
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from quiz.models import *
-from quiz.controller import QUESTIONS, calculate_quiz_result, print_badge, chronotype, image, image_highres
+from quiz.controller import *
 
+
+logger = logging.getLogger(__name__)
 
 def index(request):
     context = {'questions': QUESTIONS,
@@ -22,14 +26,15 @@ def submit(request):
                             sector = request.POST['sector'],
                             quiz_answers = answers,
                             quiz_result = calculate_quiz_result(answers),
-                            created = timezone.now(),)
+                            created = timezone.now(),
+                            printed = False)
         delegate.save()
     except (KeyError):
         return render(request, 'quiz/index.html', {
             'error_message': "Not all questions were answered",
             'questions': QUESTIONS,
         })
-    print_badge(delegate)
+    process_print_queue()
     return render(request, 'quiz/results.html',
                   {'chronotype': chronotype[delegate.quiz_result],
                    'bird_image': image_highres[delegate.quiz_result],})
@@ -38,3 +43,9 @@ def results(request):
     context = {'chronotype': None,
                'bird_image': None,}
     return render(request, 'quiz/results.html', context)
+
+def printbadge(request):
+    message = process_print_queue()
+    return render(request, 'quiz/printbadge.html', 
+                      {'message': message})
+    

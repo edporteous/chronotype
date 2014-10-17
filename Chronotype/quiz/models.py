@@ -1,6 +1,4 @@
-import datetime
 from django.db import models
-from django.utils import timezone
 
 class Delegate(models.Model):
     NOT_SPECIFIED = 'NS'
@@ -46,27 +44,15 @@ class Delegate(models.Model):
     quiz_answers = models.CommaSeparatedIntegerField(max_length=100)
     quiz_result = models.IntegerField(default=0)
     created = models.DateTimeField()
-    
+    printed = models.BooleanField()
+        
     def __unicode__(self):
         return self.first_name + ' ' + self.last_name
     
 class Printer(models.Model):
-    code = models.CharField(max_length=200)
+    url = models.CharField(max_length=200)
     
     def __unicode__(self):
         return self.code
     
-class Badge(models.Model):
-    print_time = models.DateTimeField('date and time printed')
-    message = models.CharField(max_length=2048)
-    image = models.CharField(max_length=1024)
-    delegate = models.ForeignKey(Delegate)
-    printer = models.ForeignKey(Printer)
-    printed = models.BooleanField(default=False)
-    
-    def __unicode__(self):
-        if self.printed:
-            return str(self.delegate) + ' (printed ' + self.print_time.strftime("%H:%M %d-%m-%y") + ')'
-        else:
-            return str(self.delegate) + ' (not printed)'
         
