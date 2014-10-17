@@ -53,6 +53,6 @@ class Printer(models.Model):
     url = models.CharField(max_length=200)
     
     def __unicode__(self):
-        return self.code
+        return self.url
     
         

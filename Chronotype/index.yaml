@@ -38,3 +38,8 @@ indexes:
   properties:
   - name: printed
   - name: created
+
+- kind: quiz_printer
+  properties:
+  - name: __key__
+    direction: desc

@@ -128,7 +128,11 @@ font-weight: normal;
                 '<img src="http://chronotype.co.uk/static/quiz/images/{0}"></img>'.format(image[delegate.quiz_result]) +
                 '<h3>made by theotherwayworks.co.uk</h3>' +
                 '</body></html>')]
-    result = urllib2.urlopen(URL, urllib.urlencode(post_data))
+    printer = Printer.objects.all().first()
+    if printer is None:
+        raise ValueError('No Little Printer URL configured. Check Database.')
+    url = printer.url
+    result = urllib2.urlopen(url, urllib.urlencode(post_data))
     content = result.read()
 #     if content == 'OK':
 #         print('Successfully printed badge: ' + name)
