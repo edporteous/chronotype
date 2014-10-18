@@ -132,14 +132,17 @@ font-weight: normal;
     if printer is None:
         raise ValueError('No Little Printer URL configured. Check Database.')
     url = printer.url
-    result = urllib2.urlopen(url, urllib.urlencode(post_data))
-    content = result.read()
-#     if content == 'OK':
-#         print('Successfully printed badge: ' + name)
-#     else:
-#         print('Unexpected response from remote.bergcloud.com:')
-#         print content
-
+    handle = urllib2.urlopen(url, urllib.urlencode(post_data))
+    content = handle.read()
+    if content == "Sorry, I'm offline right now!":
+        logger.info("Little printer offline, unable to print.")
+        return False
+    elif content == "OK":
+        return True
+    else:
+        logger.error("Unexpected response from Little Printer: '{0}'".format(content))
+        return False
+        
 def calculate_quiz_result(responses):
     """Calculate the chronotype based on the responses. 
        Returns the chronotype as a score between 1 and 5."""
@@ -170,10 +173,13 @@ def process_print_queue():
                                                                                                 time_since_last_request, settings.MIN_PRINT_INTERVAL))
             message = 'Nothing to do.'
         else:
-            delegate.printed = True
-            delegate.save()
-            print_badge(delegate)
-            message = 'Printing badge for {0}.'.format(str(delegate))
+            success = print_badge(delegate)
+            if success:
+                delegate.printed = True
+                delegate.save()
+                message = 'Printing badge for {0}.'.format(str(delegate))
+            else:
+                message = 'Printer offline. Badge will be printed when printer is connected.'
     else:
         message = 'No more badges to print.'
     logger.info(message)
