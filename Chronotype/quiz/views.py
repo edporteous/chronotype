@@ -15,6 +15,10 @@ def index(request):
                'sectors': Delegate.SECTOR_CHOICES,}
     return render(request, 'quiz/index.html', context)
 
+def about(request):
+    context = {}
+    return render(request, 'quiz/about.html', context)
+
 def submit(request):
     try:
         answers = []
@@ -35,14 +39,10 @@ def submit(request):
             'questions': QUESTIONS,
         })
     process_print_queue()
-    return render(request, 'quiz/results.html',
+    return render(request, 'quiz/about.html',
                   {'chronotype': chronotype[delegate.quiz_result],
-                   'bird_image': image_highres[delegate.quiz_result],})
-
-def results(request):
-    context = {'chronotype': None,
-               'bird_image': None,}
-    return render(request, 'quiz/results.html', context)
+                   'bird_image': image_highres[delegate.quiz_result],
+                   'delegate': delegate,})
 
 def printbadge(request):
     message = process_print_queue()

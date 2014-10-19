@@ -6,6 +6,11 @@ Created on 5 Oct 2014
 import logging
 from datetime import datetime, timedelta
 from django.conf import settings
+from django.templatetags.static import static
+from django.template.loader import render_to_string
+
+from django.contrib.sites.models import get_current_site
+
 from quiz.models import Delegate, Printer
 import urllib2, urllib
 
@@ -62,12 +67,12 @@ QUESTIONS = [
               Choice('Rather more a "morning" than "evening" type', 4),
               Choice('Rather more an "evening" than a "morning" type', 2), 
               Choice('Definitely an "evening" type', 0)]),
-    Question('Which is your favourite of these cakes:',
-             [Choice('Chocolate Sponge Cake', 0),
-              Choice('Carrot Cake', 0),
-              Choice('Victoria Sandwich', 0),
-              Choice('Lemon Drizzle Cake', 0),
-              Choice('Coffee & Walnut Cake', 0),])
+    Question('Which is your favourite pie?',
+             [Choice('Pork Pie', 0),
+              Choice('Steak and Kidney Pie', 0),
+              Choice('Homity Pie (v)', 0),
+              Choice('Apple Pie', 0),
+              Choice('Mince Pie', 0),])
             ]
 
 image = {5: 'extremelarksmall.jpg',
@@ -91,43 +96,16 @@ chronotype = {5: 'Extreme Lark',
 def print_badge(delegate):
     name = delegate.first_name + ' ' + delegate.last_name
     organisation = delegate.organisation
-    post_data = [('html', '<html><head><meta charset="utf-8">' +
-                '''<style type="text/css">
-body {
-background: #fff;
-color: #000;
-width: 384px;
-margin: 0px;
-padding: 20px 0px;
-}
-h1 {
-word-wrap: break-word;
-text-align: center;
-font-family: 'Quicksand';
-font-size: 325%;
-font-weight: bold;
-}
-h2 {
-word-wrap: break-word;
-text-align: center;
-font-family: 'Quicksand';
-font-size: 250%;
-font-weight: normal;
-}
-h3 {
-word-wrap: break-word;
-text-align: center;
-font-family: 'Latin Modern Mono Prop;
-font-size: 125%;
-font-weight: normal;
-}
-</style>''' +
-                '</head><body>' +
-                '<h1>' + name.upper() + '</h1>' +
-                '<h2>' + organisation + '</h2>' +
-                '<img src="http://chronotype.co.uk/static/quiz/images/{0}"></img>'.format(image[delegate.quiz_result]) +
-                '<h3>made by theotherwayworks.co.uk</h3>' +
-                '</body></html>')]
+    badge_html = render_to_string('quiz/badge.html', 
+                                  {'name': name.upper(),
+                                   'organisation': organisation,
+                                   'image': 'http://' + 
+                                        get_current_site(None).domain + 
+                                        static('quiz/images') + 
+                                        '/' + 
+                                        image[delegate.quiz_result]})
+    logger.debug(badge_html)
+    post_data = [('html', badge_html)]
     printer = Printer.objects.all().first()
     if printer is None:
         raise ValueError('No Little Printer URL configured. Check Database.')

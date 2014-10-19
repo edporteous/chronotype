@@ -29,6 +29,12 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
+- kind: django_site
+  properties:
+  - name: domain
+  - name: __key__
+    direction: desc
+
 - kind: quiz_delegate
   properties:
   - name: __key__
@@ -51,6 +57,13 @@ indexes:
   properties:
   - name: printed
   - name: created
+
+- kind: quiz_delegate
+  properties:
+  - name: printed
+  - name: created
+  - name: __key__
+    direction: desc
 
 - kind: quiz_printer
   properties:
