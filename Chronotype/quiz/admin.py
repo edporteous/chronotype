@@ -10,7 +10,8 @@ chronotype = {1: 'Extreme lark',
 def admin_print_badges(modeladmin, request, queryset):
     """Processes the admin option to print selected badges"""
     for delegate in queryset.all():
-        controller.print_badge(delegate)
+        delegate.printed = False
+        delegate.save()
 admin_print_badges.short_description = 'Print delegate badge'
 
 class DelegateAdmin(admin.ModelAdmin):
@@ -23,8 +24,11 @@ class DelegateAdmin(admin.ModelAdmin):
                                                       'quiz_result',]}),
         ('Details',                       {'fields': ['created','printed',]}),
         ]
-    actions = [admin_print_badges]
-
+    list_display = ('full_name', 'created', 'printed')
+    list_filter = ['printed', 'created']
+    search_fields = ['first_name', 'last_name', 'organisation']
+    actions = [admin_print_badges] 
+    
 admin.site.register(Delegate, DelegateAdmin)
 admin.site.register(Printer)
 

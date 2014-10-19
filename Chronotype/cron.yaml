@@ -1,1 +1,4 @@
 cron:
+- description: process print queue
+  url: /printbadge/
+  schedule: every 1 minutes

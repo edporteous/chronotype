@@ -45,9 +45,13 @@ class Delegate(models.Model):
     quiz_result = models.IntegerField(default=0)
     created = models.DateTimeField()
     printed = models.BooleanField()
-        
-    def __unicode__(self):
+    
+    def full_name(self):
         return self.first_name + ' ' + self.last_name
+    full_name.short_description = 'Delegate name'
+    
+    def __unicode__(self):
+        return self.full_name()
     
 class Printer(models.Model):
     url = models.CharField(max_length=200)

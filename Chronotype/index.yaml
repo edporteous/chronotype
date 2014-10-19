@@ -36,6 +36,19 @@ indexes:
 
 - kind: quiz_delegate
   properties:
+  - name: created
+  - name: __key__
+    direction: desc
+
+- kind: quiz_delegate
+  properties:
+  - name: created
+    direction: desc
+  - name: __key__
+    direction: desc
+
+- kind: quiz_delegate
+  properties:
   - name: printed
   - name: created
 

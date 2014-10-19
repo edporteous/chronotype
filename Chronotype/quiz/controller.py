@@ -165,23 +165,31 @@ def calculate_quiz_result(responses):
         raise AssertionError('illegal score ({0})'.format(score))
 
 def process_print_queue():
+    okay_to_print = False
     delegate = Delegate.objects.filter(printed=False).order_by('created').first()
     if delegate is not None:
-        time_since_last_request = datetime.now() - delegate.created
-        if time_since_last_request < timedelta(seconds=settings.MIN_PRINT_INTERVAL):
-            logger.info('Ignored print badge request because previous request was {0} seconds ago. Setting MIN_PRINT_INTERVAL={1} seconds.'.format(
-                                                                                                time_since_last_request, settings.MIN_PRINT_INTERVAL))
-            message = 'Nothing to do.'
-        else:
-            success = print_badge(delegate)
-            if success:
-                delegate.printed = True
-                delegate.save()
-                message = 'Printing badge for {0}.'.format(str(delegate))
+        last_printed = Delegate.objects.filter(printed=True).order_by('created').first()
+        if last_printed is not None:
+            time_since_last_request = datetime.now() - last_printed.created
+            if time_since_last_request < timedelta(seconds=settings.MIN_PRINT_INTERVAL):
+                logger.info('Ignored print badge request because previous request was {0} seconds ago. Setting MIN_PRINT_INTERVAL={1} seconds.'.format(
+                                                                                                    time_since_last_request, settings.MIN_PRINT_INTERVAL))
+                message = 'Nothing to do.'
             else:
-                message = 'Printer offline. Badge will be printed when printer is connected.'
+                okay_to_print = True
+        else:
+            okay_to_print = True
     else:
         message = 'No more badges to print.'
+
+    if okay_to_print:
+        success = print_badge(delegate)
+        if success:
+            delegate.printed = True
+            delegate.save()
+            message = 'Printing badge for {0}.'.format(str(delegate))
+        else:
+            message = 'Printer offline. Badge will be printed when printer is connected.'
     logger.info(message)
     return message
 
